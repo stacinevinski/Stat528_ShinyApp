@@ -4,8 +4,6 @@ library(usmap)
 library(ggplot2)
 theme_set(theme_bw(base_size=16))
 
-#dispInd = "Total Establishements"
-
 ui <- fluidPage(
   # Application title
   titlePanel("Top US Industries by Employment"),
@@ -190,9 +188,29 @@ server <- function(input, output) {
         TopInds<-rename(TopInds, "fips"="FIPS_CTY")
 
         plot_usmap(data = TopInds, values="INDUSTRY", include=c(stateChosen), size=1) +
-          scale_fill_discrete(name="Industry")+
           labs(title = paste(input$year,"Top Industry by",dispInd,"in",stateChosen)) +
-          theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+          theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+          scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                        "Administrative and support and waste management and remediation services"="blue",
+                                        "Agriculture, forestry, fishing and hunting"="pink",
+                                        "Arts, entertainment, and recreation"="yellow",
+                                        "Construction"="brown",
+                                        "Educational services"="purple",
+                                        "Finance and insurance"="black",
+                                        "Health care and social assistance"="green",
+                                        "Industries not classified"="orange",
+                                        "Information"="maroon",
+                                        "Management of companies and enterprises"="limegreen",
+                                        "Manufacturing"="olivedrab",
+                                        "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                        "Professional, scientific, and technical services"="turquoise",
+                                        "Real estate and rental and leasing"="aquamarine",
+                                        "Retail trade"="khaki",
+                                        "Transportation and warehousing"="orchid",
+                                        "Utilities"="navyblue",
+                                        "Wholesale trade"="honeydew",
+                                        "Other services (except public administration)"="grey"
+                                        ))
 
     })
     } else if (input$level == "State"){
@@ -224,9 +242,29 @@ server <- function(input, output) {
         TopInds<-rename(TopInds, "fips"="FIPS_ST")
 
         plot_usmap(data = TopInds, values="INDUSTRY", size=1) +
-          scale_fill_discrete(name="Industry")+
           labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-          theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+          theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+          scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                       "Administrative and support and waste management and remediation services"="blue",
+                                                       "Agriculture, forestry, fishing and hunting"="pink",
+                                                       "Arts, entertainment, and recreation"="yellow",
+                                                       "Construction"="brown",
+                                                       "Educational services"="purple",
+                                                       "Finance and insurance"="black",
+                                                       "Health care and social assistance"="green",
+                                                       "Industries not classified"="orange",
+                                                       "Information"="maroon",
+                                                       "Management of companies and enterprises"="limegreen",
+                                                       "Manufacturing"="olivedrab",
+                                                       "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                       "Professional, scientific, and technical services"="turquoise",
+                                                       "Real estate and rental and leasing"="aquamarine",
+                                                       "Retail trade"="khaki",
+                                                       "Transportation and warehousing"="orchid",
+                                                       "Utilities"="navyblue",
+                                                       "Wholesale trade"="honeydew",
+                                                       "Other services (except public administration)"="grey"
+          ))
       })
     } else if (input$level == "RegionState") {
       output$chlor <- renderPlot({
@@ -259,9 +297,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.midwest_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         } else if (input$regions == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
             group_by(FIPS_ST, INDUSTRY) %>%
@@ -270,9 +328,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.northeast_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         } else if (input$regions == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
             group_by(FIPS_ST, INDUSTRY) %>%
@@ -281,9 +359,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.south_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
             group_by(FIPS_ST, INDUSTRY) %>%
@@ -292,9 +390,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.west_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         }
       })
     } else {
@@ -334,9 +452,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.midwest_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         } else if (region == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
             group_by(FIPS_CTY, INDUSTRY) %>%
@@ -345,9 +483,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.northeast_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         } else if (region == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
             group_by(FIPS_CTY, INDUSTRY) %>%
@@ -356,9 +514,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.south_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
             group_by(FIPS_CTY, INDUSTRY) %>%
@@ -367,9 +545,29 @@ server <- function(input, output) {
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
 
           plot_usmap(data = TopInds, values="INDUSTRY", include=.west_region, size=1) +
-            scale_fill_discrete(name="Industry")+
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
-            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15))
+            theme(legend.position = "right",plot.title = element_text(size=25),legend.title = element_text(size=15),legend.text = element_text(size=15)) +
+            scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
+                                                         "Administrative and support and waste management and remediation services"="blue",
+                                                         "Agriculture, forestry, fishing and hunting"="pink",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
+                                                         "Educational services"="purple",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
+                                                         "Information"="maroon",
+                                                         "Management of companies and enterprises"="limegreen",
+                                                         "Manufacturing"="olivedrab",
+                                                         "Mining, quarrying, and oil and gas extraction"="springgreen",
+                                                         "Professional, scientific, and technical services"="turquoise",
+                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Retail trade"="khaki",
+                                                         "Transportation and warehousing"="orchid",
+                                                         "Utilities"="navyblue",
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
+            ))
         }
       })
     }
