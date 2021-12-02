@@ -3,6 +3,7 @@ library(shinyjs)
 require(dplyr)
 library(usmap)
 library(ggplot2)
+library(ggvis)
 theme_set(theme_bw(base_size=16))
 
 tags$head(
@@ -90,7 +91,7 @@ tags$head(
         
         .my_checkBox_Arts input[type="checkbox"]:before {
             border: 2px solid;
-            color: yellow;
+            color: MediumVioletRed;
             background-color: white;
             content: "";
             height: 15px;
@@ -102,7 +103,7 @@ tags$head(
   
         .my_checkBox_Arts input[type="checkbox"]:checked:after {
             border: 2px solid;
-            color: yellow;
+            color: MediumVioletRed;
             background-color: #ffcccc;
             content: "✓";
             font-size: smaller;
@@ -556,190 +557,196 @@ ui <- fluidPage(
   mainPanel(
     plotOutput("chlor")
   ),  
-    # Sidebar with a slider input for the number of bins
-    sidebarPanel(
-      sliderInput("year",
-                  "Year:",
-                  min = 2005,
-                  max = 2019,
-                  value = 2005,
-                  step = 1,
-                  ticks = FALSE),
-  
-      #Top industry calculation
-      selectInput("topInd", "Display top industry by:",
-                  c("# of Establishments" = "ESTAB",
-                    "Annual Payroll" = "PAYANN_19DOL",
-                    "First Quarter Payroll" = "PAYQTR1_19DOL",
-                    "# of Employees" = "EMP")),
-  
-      #State or County
-      selectInput("level", "Map display level of detail:",
-                  c("County (by State)" = "County",
-                    "Region (by County)"="RegionCounty",
-                    "Region (by State)"="RegionState",
-                    "State (entire US)" = "State"),
-                  "State"),
-  
-      #Show states
-      uiOutput("states"),
-  
-      #Show regions
-      uiOutput("regions"),
-  tags$div(
-    HTML(
-      '<div id="inds" class="form-group shiny-input-checkboxgroup shiny-input-container">
+  # Sidebar with a slider input for the number of bins
+  sidebarPanel(
+    sliderInput("year",
+                "Year:",
+                min = 2005,
+                max = 2019,
+                value = 2005,
+                step = 1,
+                ticks = FALSE),
+    
+    #Top industry calculation
+    selectInput("topInd", "Display top industry by:",
+                c("# of Establishments" = "ESTAB",
+                  "Annual Payroll" = "PAYANN_19DOL",
+                  "First Quarter Payroll" = "PAYQTR1_19DOL",
+                  "# of Employees" = "EMP")),
+    
+    #State or County
+    selectInput("level", "Map display level of detail:",
+                c("County (by State)" = "County",
+                  "Region (by County)"="RegionCounty",
+                  "Region (by State)"="RegionState",
+                  "State (entire US)" = "State"),
+                "State"),
+    
+    #Show states
+    uiOutput("states"),
+    
+    #Show regions
+    uiOutput("regions"),
+    tags$div(
+      HTML(
+        '<div id="inds" class="form-group shiny-input-checkboxgroup shiny-input-container">
         <label class="control-label" for="inds">Industries</label>
           <div class="my_checkBox_Accommodation">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Accommodation and food services" checked="checked"/>
-                <span><span style="color: red;">Accommodation and food services</span></span>
+                <span><span style="color: red;">&#9646;Accommodation and food services</span></span>
               </label>
             </div>
           <div class="my_checkBox_Administrative">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Administrative and support and waste management and remediation services" checked="checked"/>
-                <span><span style="color: blue;">Administrative and support and waste management and remediation services</span></span>
+                <span><span style="color: blue;">&#9646;Administrative and support and waste management and remediation services</span></span>
               </label>
             </div>
           <div class="my_checkBox_Agriculture">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Agriculture, forestry, fishing and hunting" checked="checked"/>
-                <span><span style="color: pink;">Agriculture, forestry, fishing and hunting</span></span>
+                <span><span style="color: pink;">&#9646;Agriculture, forestry, fishing and hunting</span></span>
               </label>
             </div>
           <div class="my_checkBox_Arts">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Arts, entertainment, and recreation" checked="checked"/>
-                <span><span style="color: yellow;">Arts, entertainment, and recreation</span></span>
+                <span><span style="color: MediumVioletRed;">&#9646;Arts, entertainment, and recreation</span></span>
               </label>
             </div>
           <div class="my_checkBox_Construction">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Construction" checked="checked"/>
-                <span><span style="color: brown;">Construction</span></span>
+                <span><span style="color: Salmon;">&#9646;Construction</span></span>
               </label>
             </div>
           <div class="my_checkBox_Educational">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Educational services" checked="checked"/>
-                <span><span style="color: purple;">Educational services</span></span>
+                <span><span style="color: purple;">&#9646;Educational services</span></span>
               </label>
             </div>
           <div class="my_checkBox_Finance">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Finance and insurance" checked="checked"/>
-                <span><span style="color: black;">Finance and insurance</span></span>
+                <span><span style="color: YellowGreen;">&#9646;Finance and insurance</span></span>
               </label>
             </div>
           <div class="my_checkBox_Health">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Health care and social assistance" checked="checked"/>
-                <span><span style="color: green;">Health care and social assistance</span></span>
-              </label>
-            </div>
-          <div class="my_checkBox_NotClassified">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name="inds" value="Industries not classified" checked="checked"/>
-                <span><span style="color: orange;">Industries not classified</span></span>
+                <span><span style="color: SeaGreen;">&#9646;Health care and social assistance</span></span>
               </label>
             </div>
           <div class="my_checkBox_Information">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Information" checked="checked"/>
-                <span><span style="color: maroon;">Information</span></span>
+                <span><span style="color: maroon;">&#9646;Information</span></span>
               </label>
             </div>
           <div class="my_checkBox_Management">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Management of companies and enterprises" checked="checked"/>
-                <span><span style="color: limegreen;">Management of companies and enterprises</span></span>
+                <span><span style="color: limegreen;">&#9646;Management of companies and enterprises</span></span>
               </label>
             </div>
           <div class="my_checkBox_Manufacturing">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Manufacturing" checked="checked"/>
-                <span><span style="color: olivedrab;">Manufacturing</span></span>
+                <span><span style="color: DarkOliveGreen;">&#9646;Manufacturing</span></span>
               </label>
             </div>
           <div class="my_checkBox_Mining">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Mining, quarrying, and oil and gas extraction" checked="checked"/>
-                <span><span style="color: springgreen;">Mining, quarrying, and oil and gas extraction</span></span>
+                <span><span style="color: springgreen;font-weight: bold;">&#9646;Mining, quarrying, and oil and gas extraction</span></span>
               </label>
             </div>
           <div class="my_checkBox_Professional">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Professional, scientific, and technical services" checked="checked"/>
-                <span><span style="color: turquoise;">Professional, scientific, and technical services</span></span>
+                <span><span style="color: turquoise;">&#9646;Professional, scientific, and technical services</span></span>
               </label>
             </div>
           <div class="my_checkBox_RealEstate">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Real estate and rental and leasing" checked="checked"/>
-                <span><span style="color: aquamarine;">Real estate and rental and leasing</span></span>
+                <span><span style="color: SteelBlue;">&#9646;Real estate and rental and leasing</span></span>
               </label>
             </div>
           <div class="my_checkBox_Retail">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Retail trade" checked="checked"/>
-                <span><span style="color: khaki;">Retail trade</span></span>
+                <span><span style="color: khaki;font-weight: bold;">&#9646;Retail trade</span></span>
               </label>
             </div>
           <div class="my_checkBox_Transportation">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Transportation and warehousing" checked="checked"/>
-                <span><span style="color: orchid;">Transportation and warehousing</span></span>
+                <span><span style="color: orchid;">&#9646;Transportation and warehousing</span></span>
               </label>
             </div>
           <div class="my_checkBox_Utilities">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Utilities" checked="checked"/>
-                <span><span style="color: navyblue;">Utilities</span></span>
+                <span><span style="color: navyblue;">&#9646;Utilities</span></span>
               </label>
             </div>
           <div class="my_checkBox_Wholesale">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Wholesale trade" checked="checked"/>
-                <span><span style="color: honeydew;">Wholesale trade</span></span>
+                <span><span style="color: RosyBrown;">&#9646;Wholesale trade</span></span>
               </label>
             </div>
           <div class="my_checkBox_Other">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Other services (except public administration)" checked="checked"/>
-                <span><span style="color: grey;">Other services (except public administration)</span></span>
+                <span><span style="color: orange;">&#9646;Other services (except public administration)</span></span>
               </label>
             </div>
+          </div>
+          <div class="my_checkBox_NotClassified">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="inds" value="Industries not classified" checked="checked"/>
+                <span><span style="color: Tan;">&#9646;Industries not classified</span></span>
+              </label>
+            </div>
+          <div class="Not Available">
+              <label>
+                <span><span style="color: grey;">&#9646;Not Available</span></span>
+              </label>
           </div>'
+        
       )
     )
-    )
+  )
 )
-  
+
 server <- function(input, output) {
   output$states <- renderUI({
     req(input$level == "County")
-
+    
     selectInput("states", "State:",
                 c("Alabama"="Alabama",
                   "Alaska"="Alaska",
@@ -793,10 +800,10 @@ server <- function(input, output) {
                   "Wyoming"="Wyoming"
                 ),"Alabama")
   })
-
+  
   output$regions <- renderUI({
     req(input$level == "RegionState" | input$level == "RegionCounty")
-
+    
     selectInput("regions", "Region:",
                 c("Midwest"="Midwest",
                   "Northeast"="Northeast",
@@ -804,7 +811,7 @@ server <- function(input, output) {
                   "West"="West"
                 ))
   })
-
+  
   observeEvent(input$topInd,{
     if (input$topInd == "ESTAB"){
       dispInd = "Total Establishments"
@@ -816,7 +823,7 @@ server <- function(input, output) {
       dispInd = "Total Number of Employees"
     }
   })
-
+  
   observeEvent(input$level,{
     if(input$level == "County"){
       output$chlor <- renderPlot({
@@ -830,7 +837,7 @@ server <- function(input, output) {
             indsList <- append(indsList,i)
           }
         }
-
+        
         if (input$topInd == "ESTAB"){
           dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
@@ -840,44 +847,44 @@ server <- function(input, output) {
         } else {
           dispInd = "Total Number of Employees"
         }
-
+        
         if (is.null(input$states)) {
           stateChosen = "Alabama"
         } else {
           stateChosen = input$states
         }
-
+        
         TopInds <- df %>% filter(YEAR==input$year, STATE==stateChosen,INDUSTRY %in% indsList) %>%
           group_by(FIPS_CTY, INDUSTRY) %>%
           summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
           filter(Total == max(Total))
         TopInds<-rename(TopInds, "fips"="FIPS_CTY")
-
+        
         plot_usmap(data = TopInds, values="INDUSTRY", include=c(stateChosen), size=1) +
           labs(title = paste(input$year,"Top Industry by",dispInd,"in",stateChosen)) +
           theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
           scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                        "Administrative and support and waste management and remediation services"="blue",
                                                        "Agriculture, forestry, fishing and hunting"="pink",
-                                                       "Arts, entertainment, and recreation"="yellow",
-                                                       "Construction"="brown",
+                                                       "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                       "Construction"="Salmon",
                                                        "Educational services"="purple",
-                                                       "Finance and insurance"="black",
-                                                       "Health care and social assistance"="green",
-                                                       "Industries not classified"="orange",
+                                                       "Finance and insurance"="YellowGreen",
+                                                       "Health care and social assistance"="SeaGreen",
+                                                       "Industries not classified"="Tan",
                                                        "Information"="maroon",
                                                        "Management of companies and enterprises"="limegreen",
-                                                       "Manufacturing"="olivedrab",
+                                                       "Manufacturing"="DarkOliveGreen",
                                                        "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                        "Professional, scientific, and technical services"="turquoise",
-                                                       "Real estate and rental and leasing"="aquamarine",
+                                                       "Real estate and rental and leasing"="SteelBlue",
                                                        "Retail trade"="khaki",
                                                        "Transportation and warehousing"="orchid",
                                                        "Utilities"="navyblue",
-                                                       "Wholesale trade"="honeydew",
-                                                       "Other services (except public administration)"="grey"
+                                                       "Wholesale trade"="RosyBrown",
+                                                       "Other services (except public administration)"="orange"
           ))
-
+        
       })
     } else if (input$level == "State"){
       output$chlor <- renderPlot({
@@ -891,7 +898,7 @@ server <- function(input, output) {
             indsList <- append(indsList,i)
           }
         }
-
+        
         if (input$topInd == "ESTAB"){
           dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
@@ -906,30 +913,30 @@ server <- function(input, output) {
           summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
           filter(Total == max(Total))
         TopInds<-rename(TopInds, "fips"="FIPS_ST")
-
+        
         plot_usmap(data = TopInds, values="INDUSTRY", size=1) +
           labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
           theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
           scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                        "Administrative and support and waste management and remediation services"="blue",
                                                        "Agriculture, forestry, fishing and hunting"="pink",
-                                                       "Arts, entertainment, and recreation"="yellow",
-                                                       "Construction"="brown",
+                                                       "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                       "Construction"="Salmon",
                                                        "Educational services"="purple",
-                                                       "Finance and insurance"="black",
-                                                       "Health care and social assistance"="green",
-                                                       "Industries not classified"="orange",
+                                                       "Finance and insurance"="YellowGreen",
+                                                       "Health care and social assistance"="SeaGreen",
+                                                       "Industries not classified"="Tan",
                                                        "Information"="maroon",
                                                        "Management of companies and enterprises"="limegreen",
-                                                       "Manufacturing"="olivedrab",
+                                                       "Manufacturing"="DarkOliveGreen",
                                                        "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                        "Professional, scientific, and technical services"="turquoise",
-                                                       "Real estate and rental and leasing"="aquamarine",
+                                                       "Real estate and rental and leasing"="SteelBlue",
                                                        "Retail trade"="khaki",
                                                        "Transportation and warehousing"="orchid",
                                                        "Utilities"="navyblue",
-                                                       "Wholesale trade"="honeydew",
-                                                       "Other services (except public administration)"="grey"
+                                                       "Wholesale trade"="RosyBrown",
+                                                       "Other services (except public administration)"="orange"
           ))
       })
     } else if (input$level == "RegionState") {
@@ -944,7 +951,7 @@ server <- function(input, output) {
             indsList <- append(indsList,i)
           }
         }
-
+        
         if (input$topInd == "ESTAB"){
           dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
@@ -954,37 +961,37 @@ server <- function(input, output) {
         } else {
           dispInd = "Total Number of Employees"
         }
-
+        
         if (input$regions == "Midwest"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("North Dakota","South Dakota","Nebraska","Kansas","Minnesota","Iowa","Missouri","Wisconsin","Illinois","Michigan","Indiana","Ohio")) %>%
             group_by(FIPS_ST, INDUSTRY) %>%
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.midwest_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (input$regions == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
@@ -992,30 +999,30 @@ server <- function(input, output) {
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.northeast_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (input$regions == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
@@ -1023,30 +1030,30 @@ server <- function(input, output) {
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.south_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
@@ -1054,30 +1061,30 @@ server <- function(input, output) {
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_ST")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.west_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         }
       })
@@ -1093,7 +1100,7 @@ server <- function(input, output) {
             indsList <- append(indsList,i)
           }
         }
-
+        
         if (input$topInd == "ESTAB"){
           dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
@@ -1103,43 +1110,43 @@ server <- function(input, output) {
         } else {
           dispInd = "Total Number of Employees"
         }
-
+        
         if (is.null(input$regions)) {
           region="Midwest"
         } else {
           region = input$regions
         }
-
+        
         if (region == "Midwest"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("North Dakota","South Dakota","Nebraska","Kansas","Minnesota","Iowa","Missouri","Wisconsin","Illinois","Michigan","Indiana","Ohio")) %>%
             group_by(FIPS_CTY, INDUSTRY) %>%
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.midwest_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (region == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
@@ -1147,30 +1154,30 @@ server <- function(input, output) {
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.northeast_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (region == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
@@ -1178,30 +1185,30 @@ server <- function(input, output) {
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.south_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
@@ -1209,30 +1216,30 @@ server <- function(input, output) {
             summarise(Total = sum(.data[[noquote(input$topInd)]])) %>%
             filter(Total == max(Total))
           TopInds<-rename(TopInds, "fips"="FIPS_CTY")
-
+          
           plot_usmap(data = TopInds, values="INDUSTRY", include=.west_region, size=1) +
             labs(title = paste(input$year,"Top Industry by",dispInd,"in Each State")) +
             theme(plot.title = element_text(size=25),legend.title = element_text(size=15),legend.position="none") +
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         }
       })
