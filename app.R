@@ -586,6 +586,33 @@ ui <- fluidPage(
             top: 0;
             width: 15px;
         }
+        
+        .my_checkBox_NA input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: grey;
+            background-color: grey;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_NA input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: grey;
+            background-color: grey;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
 
   '))
     ),
@@ -732,11 +759,14 @@ ui <- fluidPage(
                 <input type="checkbox" name="inds" value="Other services (except public administration)" checked="checked"/>
                 <span><span style="color: black;">Other services (except public administration)</span></span>
               </label>
-            </div>
+          </div>
+          <div class="my_checkBox_NA">
+            <div class="checkbox">
               <label>
-                <span><span style="color: grey;">&#9646;Not Available</span></span>
+                <input type="checkbox" name="" value="" checked="checked"/>
+                <span><span style="color: black;">Not Available</span></span>
               </label>
-
+            </div class="checkbox">
           </div>'
       )
     )
