@@ -807,7 +807,7 @@ server <- function(input, output) {
 
   observeEvent(input$topInd,{
     if (input$topInd == "ESTAB"){
-      dispInd = "Total Establishements"
+      dispInd = "Total Establishments"
     } else if (input$topInd == "PAYANN_19DOL"){
       dispInd = "Annual Payroll"
     } else if (input$topInd == "PAYQTR1_19DOL"){
@@ -832,7 +832,7 @@ server <- function(input, output) {
         }
 
         if (input$topInd == "ESTAB"){
-          dispInd = "Total Establishements"
+          dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
           dispInd = "Annual Payroll"
         } else if (input$topInd == "PAYQTR1_19DOL"){
@@ -893,7 +893,7 @@ server <- function(input, output) {
         }
 
         if (input$topInd == "ESTAB"){
-          dispInd = "Total Establishements"
+          dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
           dispInd = "Annual Payroll"
         } else if (input$topInd == "PAYQTR1_19DOL"){
@@ -946,7 +946,7 @@ server <- function(input, output) {
         }
 
         if (input$topInd == "ESTAB"){
-          dispInd = "Total Establishements"
+          dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
           dispInd = "Annual Payroll"
         } else if (input$topInd == "PAYQTR1_19DOL"){
@@ -1095,7 +1095,7 @@ server <- function(input, output) {
         }
 
         if (input$topInd == "ESTAB"){
-          dispInd = "Total Establishements"
+          dispInd = "Total Establishments"
         } else if (input$topInd == "PAYANN_19DOL"){
           dispInd = "Annual Payroll"
         } else if (input$topInd == "PAYQTR1_19DOL"){
