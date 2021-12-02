@@ -3,556 +3,9 @@ library(shinyjs)
 require(dplyr)
 library(usmap)
 library(ggplot2)
-library(ggvis)
 theme_set(theme_bw(base_size=16))
 
-tags$head(
-  tags$style(HTML('
-        .my_checkBox_Accommodation input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Accommodation input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Administrative input[type="checkbox"]:before {
-            border: 2px solid;
-            color: blue;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Administrative input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: blue;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Agriculture input[type="checkbox"]:before {
-            border: 2px solid;
-            color: pink;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Agriculture input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: pink;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Arts input[type="checkbox"]:before {
-            border: 2px solid;
-            color: MediumVioletRed;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Arts input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: MediumVioletRed;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Construction input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Construction input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Educational input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Educational input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Finance input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Finance input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Health input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Health input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_NotClassified input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_NotClassified input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Information input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Information input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Management input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Management input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Manufacturing input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Manufacturing input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Mining input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Mining input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Professional input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Professional input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_RealEstate input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_RealEstate input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Retail input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Retail input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Transportation input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Transportation input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Utilities input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Utilities input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Wholesale input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Wholesale input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-        
-        .my_checkBox_Other input[type="checkbox"]:before {
-            border: 2px solid;
-            color: red;
-            background-color: white;
-            content: "";
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  
-        .my_checkBox_Other input[type="checkbox"]:checked:after {
-            border: 2px solid;
-            color: red;
-            background-color: #ffcccc;
-            content: "✓";
-            font-size: smaller;
-            vertical-align: middle;
-            text-align: center;
-            height: 15px;
-            left: 0;
-            position: absolute;
-            top: 0;
-            width: 15px;
-        }
-  '))
-)
-
 ui <- fluidPage(
-  # Application title
-  titlePanel("Top US Industries by Employment"),
   # Show a plot of the generated distribution
   mainPanel(
     plotOutput("chlor")
@@ -587,6 +40,550 @@ ui <- fluidPage(
     
     #Show regions
     uiOutput("regions"),
+    tags$head(
+      tags$style(HTML('
+        .my_checkBox_Accommodation input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Accommodation input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: red;
+            background-color: red;
+            content: "X";
+            font-size: smaller;
+            font-color: black;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Administrative input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Administrative input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: blue;
+            background-color: blue;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Agriculture input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Agriculture input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: pink;
+            background-color: pink;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Arts input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Arts input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: yellow;
+            background-color: yellow;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Construction input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Construction input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: brown;
+            background-color: brown;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Educational input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Educational input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: purple;
+            background-color: purple;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Finance input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Finance input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: black;
+            background-color: black;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Health input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Health input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: green;
+            background-color: green;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_NotClassified input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_NotClassified input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: orange;
+            background-color: orange;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Information input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Information input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: maroon;
+            background-color: maroon;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Management input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Management input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: limegreen;
+            background-color: limegreen;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Manufacturing input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Manufacturing input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: olivedrab;
+            background-color: olivedrab;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Mining input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Mining input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: springgreen;
+            background-color: springgreen;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Professional input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Professional input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: turquoise;
+            background-color: turquoise;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_RealEstate input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_RealEstate input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: aquamarine;
+            background-color: aquamarine;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Retail input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Retail input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: khaki;
+            background-color: khaki;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Transportation input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Transportation input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: orchid;
+            background-color: orchid;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Utilities input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Utilities input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: navyblue;
+            background-color: navyblue;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Wholesale input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Wholesale input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: honeydew;
+            background-color: honeydew;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+        
+        .my_checkBox_Other input[type="checkbox"]:before {
+            border: 2px solid black;
+            color: white;
+            background-color: white;
+            content: "";
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  
+        .my_checkBox_Other input[type="checkbox"]:checked:after {
+            border: 2px solid black;
+            color: grey;
+            background-color: grey;
+            content: "X";
+            font-size: smaller;
+            vertical-align: middle;
+            text-align: center;
+            height: 15px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 15px;
+        }
+  '))
+    ),
     tags$div(
       HTML(
         '<div id="inds" class="form-group shiny-input-checkboxgroup shiny-input-container">
@@ -595,149 +592,143 @@ ui <- fluidPage(
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Accommodation and food services" checked="checked"/>
-                <span><span style="color: red;">&#9646;Accommodation and food services</span></span>
+                <span><span style="color: black;">Accommodation and food services</span></span>
               </label>
             </div>
           <div class="my_checkBox_Administrative">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Administrative and support and waste management and remediation services" checked="checked"/>
-                <span><span style="color: blue;">&#9646;Administrative and support and waste management and remediation services</span></span>
+                <span><span style="color: black;">Administrative and support and waste management and remediation services</span></span>
               </label>
             </div>
           <div class="my_checkBox_Agriculture">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Agriculture, forestry, fishing and hunting" checked="checked"/>
-                <span><span style="color: pink;">&#9646;Agriculture, forestry, fishing and hunting</span></span>
+                <span><span style="color: black;">Agriculture, forestry, fishing and hunting</span></span>
               </label>
             </div>
           <div class="my_checkBox_Arts">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Arts, entertainment, and recreation" checked="checked"/>
-                <span><span style="color: MediumVioletRed;">&#9646;Arts, entertainment, and recreation</span></span>
+                <span><span style="color: black;">Arts, entertainment, and recreation</span></span>
               </label>
             </div>
           <div class="my_checkBox_Construction">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Construction" checked="checked"/>
-                <span><span style="color: Salmon;">&#9646;Construction</span></span>
+                <span><span style="color: black;">Construction</span></span>
               </label>
             </div>
           <div class="my_checkBox_Educational">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Educational services" checked="checked"/>
-                <span><span style="color: purple;">&#9646;Educational services</span></span>
+                <span><span style="color: black;">Educational services</span></span>
               </label>
             </div>
           <div class="my_checkBox_Finance">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Finance and insurance" checked="checked"/>
-                <span><span style="color: YellowGreen;">&#9646;Finance and insurance</span></span>
+                <span><span style="color: black;">Finance and insurance</span></span>
               </label>
             </div>
           <div class="my_checkBox_Health">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Health care and social assistance" checked="checked"/>
-                <span><span style="color: SeaGreen;">&#9646;Health care and social assistance</span></span>
+                <span><span style="color: black;">Health care and social assistance</span></span>
+              </label>
+            </div>
+          <div class="my_checkBox_NotClassified">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="inds" value="Industries not classified" checked="checked"/>
+                <span><span style="color: black;">Industries not classified</span></span>
               </label>
             </div>
           <div class="my_checkBox_Information">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Information" checked="checked"/>
-                <span><span style="color: maroon;">&#9646;Information</span></span>
+                <span><span style="color: black;">Information</span></span>
               </label>
             </div>
           <div class="my_checkBox_Management">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Management of companies and enterprises" checked="checked"/>
-                <span><span style="color: limegreen;">&#9646;Management of companies and enterprises</span></span>
+                <span><span style="color: black;">Management of companies and enterprises</span></span>
               </label>
             </div>
           <div class="my_checkBox_Manufacturing">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Manufacturing" checked="checked"/>
-                <span><span style="color: DarkOliveGreen;">&#9646;Manufacturing</span></span>
+                <span><span style="color: black;">Manufacturing</span></span>
               </label>
             </div>
           <div class="my_checkBox_Mining">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Mining, quarrying, and oil and gas extraction" checked="checked"/>
-                <span><span style="color: springgreen;font-weight: bold;">&#9646;Mining, quarrying, and oil and gas extraction</span></span>
+                <span><span style="color: black;">Mining, quarrying, and oil and gas extraction</span></span>
               </label>
             </div>
           <div class="my_checkBox_Professional">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Professional, scientific, and technical services" checked="checked"/>
-                <span><span style="color: turquoise;">&#9646;Professional, scientific, and technical services</span></span>
+                <span><span style="color: black;">Professional, scientific, and technical services</span></span>
               </label>
             </div>
           <div class="my_checkBox_RealEstate">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Real estate and rental and leasing" checked="checked"/>
-                <span><span style="color: SteelBlue;">&#9646;Real estate and rental and leasing</span></span>
+                <span><span style="color: black;">Real estate and rental and leasing</span></span>
               </label>
             </div>
           <div class="my_checkBox_Retail">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Retail trade" checked="checked"/>
-                <span><span style="color: khaki;font-weight: bold;">&#9646;Retail trade</span></span>
+                <span><span style="color: black;">Retail trade</span></span>
               </label>
             </div>
           <div class="my_checkBox_Transportation">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Transportation and warehousing" checked="checked"/>
-                <span><span style="color: orchid;">&#9646;Transportation and warehousing</span></span>
+                <span><span style="color: black;">Transportation and warehousing</span></span>
               </label>
             </div>
           <div class="my_checkBox_Utilities">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Utilities" checked="checked"/>
-                <span><span style="color: navyblue;">&#9646;Utilities</span></span>
+                <span><span style="color: black;">Utilities</span></span>
               </label>
             </div>
           <div class="my_checkBox_Wholesale">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Wholesale trade" checked="checked"/>
-                <span><span style="color: RosyBrown;">&#9646;Wholesale trade</span></span>
+                <span><span style="color: black;">Wholesale trade</span></span>
               </label>
             </div>
           <div class="my_checkBox_Other">
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="inds" value="Other services (except public administration)" checked="checked"/>
-                <span><span style="color: orange;">&#9646;Other services (except public administration)</span></span>
+                <span><span style="color: black;">Other services (except public administration)</span></span>
               </label>
             </div>
-          </div>
-          <div class="my_checkBox_NotClassified">
-            <div class="checkbox">
-              <label>
-                <input type="checkbox" name="inds" value="Industries not classified" checked="checked"/>
-                <span><span style="color: Tan;">&#9646;Industries not classified</span></span>
-              </label>
-            </div>
-          <div class="Not Available">
-              <label>
-                <span><span style="color: grey;">&#9646;Not Available</span></span>
-              </label>
           </div>'
-        
       )
     )
   )
@@ -866,23 +857,23 @@ server <- function(input, output) {
           scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                        "Administrative and support and waste management and remediation services"="blue",
                                                        "Agriculture, forestry, fishing and hunting"="pink",
-                                                       "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                       "Construction"="Salmon",
+                                                       "Arts, entertainment, and recreation"="yellow",
+                                                       "Construction"="brown",
                                                        "Educational services"="purple",
-                                                       "Finance and insurance"="YellowGreen",
-                                                       "Health care and social assistance"="SeaGreen",
-                                                       "Industries not classified"="Tan",
+                                                       "Finance and insurance"="black",
+                                                       "Health care and social assistance"="green",
+                                                       "Industries not classified"="orange",
                                                        "Information"="maroon",
                                                        "Management of companies and enterprises"="limegreen",
-                                                       "Manufacturing"="DarkOliveGreen",
+                                                       "Manufacturing"="olivedrab",
                                                        "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                        "Professional, scientific, and technical services"="turquoise",
-                                                       "Real estate and rental and leasing"="SteelBlue",
+                                                       "Real estate and rental and leasing"="aquamarine",
                                                        "Retail trade"="khaki",
                                                        "Transportation and warehousing"="orchid",
                                                        "Utilities"="navyblue",
-                                                       "Wholesale trade"="RosyBrown",
-                                                       "Other services (except public administration)"="orange"
+                                                       "Wholesale trade"="honeydew",
+                                                       "Other services (except public administration)"="grey"
           ))
         
       })
@@ -920,23 +911,23 @@ server <- function(input, output) {
           scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                        "Administrative and support and waste management and remediation services"="blue",
                                                        "Agriculture, forestry, fishing and hunting"="pink",
-                                                       "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                       "Construction"="Salmon",
+                                                       "Arts, entertainment, and recreation"="yellow",
+                                                       "Construction"="brown",
                                                        "Educational services"="purple",
-                                                       "Finance and insurance"="YellowGreen",
-                                                       "Health care and social assistance"="SeaGreen",
-                                                       "Industries not classified"="Tan",
+                                                       "Finance and insurance"="black",
+                                                       "Health care and social assistance"="green",
+                                                       "Industries not classified"="orange",
                                                        "Information"="maroon",
                                                        "Management of companies and enterprises"="limegreen",
-                                                       "Manufacturing"="DarkOliveGreen",
+                                                       "Manufacturing"="olivedrab",
                                                        "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                        "Professional, scientific, and technical services"="turquoise",
-                                                       "Real estate and rental and leasing"="SteelBlue",
+                                                       "Real estate and rental and leasing"="aquamarine",
                                                        "Retail trade"="khaki",
                                                        "Transportation and warehousing"="orchid",
                                                        "Utilities"="navyblue",
-                                                       "Wholesale trade"="RosyBrown",
-                                                       "Other services (except public administration)"="orange"
+                                                       "Wholesale trade"="honeydew",
+                                                       "Other services (except public administration)"="grey"
           ))
       })
     } else if (input$level == "RegionState") {
@@ -975,23 +966,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         } else if (input$regions == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
@@ -1006,23 +997,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         } else if (input$regions == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
@@ -1037,23 +1028,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
@@ -1068,23 +1059,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         }
       })
@@ -1130,23 +1121,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         } else if (region == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
@@ -1161,23 +1152,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         } else if (region == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
@@ -1192,23 +1183,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
@@ -1223,23 +1214,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
-                                                         "Construction"="Salmon",
+                                                         "Arts, entertainment, and recreation"="yellow",
+                                                         "Construction"="brown",
                                                          "Educational services"="purple",
-                                                         "Finance and insurance"="YellowGreen",
-                                                         "Health care and social assistance"="SeaGreen",
-                                                         "Industries not classified"="Tan",
+                                                         "Finance and insurance"="black",
+                                                         "Health care and social assistance"="green",
+                                                         "Industries not classified"="orange",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="DarkOliveGreen",
+                                                         "Manufacturing"="olivedrab",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="SteelBlue",
+                                                         "Real estate and rental and leasing"="aquamarine",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
                                                          "Utilities"="navyblue",
-                                                         "Wholesale trade"="RosyBrown",
-                                                         "Other services (except public administration)"="orange"
+                                                         "Wholesale trade"="honeydew",
+                                                         "Other services (except public administration)"="grey"
             ))
         }
       })
