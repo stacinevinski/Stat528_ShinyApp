@@ -5,6 +5,10 @@ library(usmap)
 library(ggplot2)
 theme_set(theme_bw(base_size=16))
 
+if(!exists("CPI")) {
+  source("DataPrep.R")
+}
+
 ui <- fluidPage(
   # Show a plot of the generated distribution
   mainPanel(
