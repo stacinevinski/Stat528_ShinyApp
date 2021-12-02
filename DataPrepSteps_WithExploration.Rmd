@@ -1,0 +1,314 @@
+---
+title: "Clean and Prep dataset With Exploration"
+output: html_notebook
+---
+## Prep dataset
+Cleaning
+ * Remove "Statewide" summary rows
+ * Remove Territories (but leave DC)
+ * X Make County name consistent
+ * X Split COUNTY into County and State
+ * X Make LFO (Name of industry) consistent
+ * coerce factor variables to be factors (NOT DONE YET)
+
+Add a date type field for the year. Maybe 3/15/YEAR<br>
+
+ Deal with inflation (Use Consumer Price Index)
+ * merge in inflation factors and convert to 2019 dollars
+ * Annual Payroll adjusted for inflation
+ * Quarter 1 payroll adjusted for inflation
+
+Add Average wage rates 
+ * Average wage rate for all industries by county
+ * Average wage rate for a given industry by county
+ * Average wage rate for all industries by state
+ * Average wage rate for a given industry by state
+
+## Read in libraries and data
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(lubridate)
+library(ggplot2)
+
+# Create a not in operator:
+`%notin%` <- Negate(`%in%`)
+
+df <- read.csv("FinalProjectDataset.csv")
+str(df)
+summary(df)
+head(df)
+```
+## Remove "Statewide" rows
+
+```{r}
+
+df<-df %>% filter(substr(df$COUNTYSTATE,1,9)!="Statewide")
+# Removes 4,683 rows that are statewide aggregate numbers
+```
+## Remove Territories
+ * 60 = American Samoa
+ * 66 = Guam
+ * 69 = Commonwealth of the Northern Mariana Islands
+ * 72 = Puerto Rico
+ * 78 = United States Virgin Islands
+ 
+## But Keep Washington DC
+11 = District of Columbia
+ 
+```{r}
+excludeList <- list(60,66,69,72,78) # If we want to get rid of DC add 11 to this list
+df<-df %>% filter(!STATENUM %in% excludeList)
+# Removes 21,604 rows that are records on the territories
+```
+
+## Make County Name consistent
+Look for Counties missing from the list of 2019 Counties
+
+```{r}
+
+# add a field to df that concatenates state and county nums (STCTYNUM)
+df<-mutate(df,STCTYNUM=paste(str_pad(df$STATENUM,2,pad="0"),str_pad(df$COUNTYNUM,3,pad="0"),sep="_"))
+
+# How many unique STCTYNUMs are there in the entire dataset (aka how many counties are there in the US over this time period?)
+nrow(df %>% summarise(unique(STCTYNUM)))
+# 3148 counties
+
+# How many counties are in 2019?
+nrow(df %>% filter(YEAR == 2019) %>% summarise(unique(STCTYNUM)))
+# 3134 counties
+# What happened to 14 counties?
+
+# Which counties are in the entire set that aren't in 2019?
+counties_all  <- df %>% summarise(STCTYNUM = unique(STCTYNUM))
+counties_2019 <- df %>% filter(YEAR == 2019) %>% summarise(STCTYNUM = unique(STCTYNUM))
+
+InotIn2019 <- which(counties_all$STCTYNUM %notin% counties_2019$STCTYNUM) #InotIn2019 has my indicies of the counties in all but not 2019
+length(InotIn2019) # 14 counties
+
+# Get the STCTYNUM field for the counties are in the dataset but not in 2019
+notIn2019 <- counties_all$STCTYNUM[InotIn2019]
+# How many records are in the df with the counties that are in years prior to 2019, but not 2019?
+nrow(df %>% filter(STCTYNUM %in% notIn2019))
+#1303
+
+# Look at COUNTY STATE for the 14 counties in the dataset but not in 2019 and the last year they appear
+df %>% filter(STCTYNUM %in% notIn2019) %>%
+  group_by(STCTYNUM) %>%
+  summarise(COUNTYSTATE=first(COUNTYSTATE), LastYear=max(YEAR))
+
+# Export this to csv to track research for why these counties may be missing from 2019
+#write.csv(df %>% filter(STCTYNUM %in% notIn2019) %>%
+#          group_by(STCTYNUM) %>%
+#          summarise(COUNTYSTATE=first(COUNTYSTATE), LastYear=max(YEAR)),
+#          "CountiesNotIn2019.csv",row.names=FALSE) 
+
+# Google around to figure out what happened to these counties.
+# Short answer: 2 counties just changed names (and COUNTYNUM apparently)
+# Most of the 14 just had zero establishments at the 2 digit NAIC level
+# Alaska keeps changing its countyies' borders. 
+# One (51_515) is Bedford City, VA which is in Bedford County, VA, but it used 
+#   to be an independent city until 2013, when it became a part of Bedford county
+#   https://en.wikipedia.org/wiki/Bedford,_Virginia
+# df %>% filter(str_detect(COUNTYSTATE,"Bedford") & STATENUM == 51)
+#   Remove Bedford City Records or merge them with Bedford County? Or just leave it as is?
+
+# For now, leaving Bedford City as is.
+
+```
+
+## Make County Name consistent
+Use the 2019 COUNTY names 
+
+```{r}
+# create df of 2019 county names, state names, and STCTYNUM
+countiesNames <- df %>% filter(YEAR == 2019) %>% 
+  group_by(COUNTYSTATE) %>%
+  summarise(
+    COUNTY19 = unique(COUNTYSTATE),
+    COUNTYNUM = unique(COUNTYNUM),
+    STATENUM = unique(STATENUM)
+  ) %>% 
+  mutate(STCTYNUM=paste(str_pad(STATENUM,2,pad="0"),str_pad(COUNTYNUM,3,pad="0"),sep="_")) %>% # Add concat of state and county nums
+  separate(COUNTY19,c("COUNTY","STATE"),sep=", ") %>% # split county and state names
+  select(COUNTY,STATE,STCTYNUM) %>%
+  arrange(STCTYNUM)
+
+# Add to countiesNames the 14 that are missing from 2019
+
+Missing2019 <- data.frame(COUNTY = c("Prince of Wales Outer Ketchikan Census Area",
+                                     "Skagway-Hoonah-Angoon Census Area",
+                                     "Kusilvak Census Area", 
+                                     "Wrangell-Petersburg Census Area",
+                                     "Kalawao County", "Petroleum County",
+                                     "Banner County", "McPherson County",
+                                     "Esmeralda County", "Oglala Lakota County",
+                                     "Borden County", "King County", 
+                                     "Loving County", "Bedford City"),
+                          STATE = c("Alaska", "Alaska", "Alaska", "Alaska", 
+                                    "Hawaii", "Montana", "Nebraska", "Nebraska",
+                                    "Nevada", "South Dakota", "Texas", "Texas",
+                                    "Texas", "Virginia"),
+                          STCTYNUM = c("02_201", "02_232", "02_270", "02_280",
+                                       "15_005", "30_069", "31_007", "31_117",
+                                       "32_009", "46_113", "48_033", "48_269", 
+                                       "48_301","51_515"))
+
+countiesNames <- rbind(countiesNames, Missing2019)
+
+# Add COUNTY and STATE to df
+#df<-merge(df,countiesNames, by="STCTYNUM", all=TRUE) # use this one to debug the missing records
+df<-merge(df, countiesNames, by="STCTYNUM")
+str(df)
+
+# This is no longer the case just wanted an example of looking for NA's in here
+#sum(is.na(df$COUNTY))
+#df %>% filter(is.na(COUNTY)) %>% 
+#  summarise(unique(STCTYNUM))
+# 14 counties have NA in COUNTY
+#df %>% filter(STCTYNUM == "02_201") %>% arrange(YEAR)
+
+# I want to see what COUNTY looks like
+uniqueCounties <- df %>%
+  group_by(STCTYNUM) %>%
+  summarise(
+    COUNTY = unique(COUNTY),
+    ST = unique(STATE)
+  )
+
+```
+
+## Make LFO consistent
+Use the 2019 LFO (industry names)
+
+```{r}
+
+LFO2019 <- df %>% filter(YEAR == 2019) %>% 
+  group_by(NAIC) %>%
+  summarise(
+    INDUSTRY = unique(LFO),
+  ) %>% 
+  arrange(INDUSTRY)
+
+# Check if records have NAIC codes that are not in the LFO2019 list
+InotIn2019 <- which(df$NAIC %notin% LFO2019$NAIC)
+length(InotIn2019)
+# 65,186 records. Whoa. What are we missing
+# Get the records for the NAICs that are in the dataset but not in 2019
+notIn2019 <- df$NAIC[InotIn2019]
+
+# Look at NAIC for those in the dataset but not in 2019 and the last year they appear
+df %>% filter(NAIC %in% notIn2019) %>%
+  group_by(NAIC) %>%
+  summarise(LFO=first(LFO), LastYear=max(YEAR))
+# Just 3 NAIC Codes, all last year is 2011, but these are all in 2019, 
+# Need to trim the whitespace off NAIC.
+df$NAIC <- str_trim(df$NAIC, side="both")
+
+# Check if we have any codes not in our list now.
+InotIn2019 <- which(df$NAIC %notin% LFO2019$NAIC)
+length(InotIn2019)
+# Hurray, that got them all
+
+#df<-merge(df, LFO2019, by="NAIC")
+df<-merge(df, LFO2019, by="NAIC",all=TRUE)
+
+# SN probably need to check other fields for whitespace
+
+```
+
+## Add a date type field for the year. Maybe 3/15/YEAR
+
+```{r}
+df$DATE <- mdy(paste("03", "15", df$YEAR, sep="/"))
+
+```
+
+## Deal with inflation (Use Consumer Price Index)
+ * merge in inflation factors and convert to 2019 dollars
+ * Annual Payroll adjusted for inflation
+ * Quarter 1 payroll adjusted for inflation
+ 
+```{r}
+
+# Add inflation multiplier to convert to 2019 dollars to df
+CPI <- read.csv("CPI2019.csv")
+str(CPI)
+CPI<-CPI[,c("Year","CPI_2019")] # removed Annual column before merge
+df<-merge(df, CPI, by.x="YEAR", by.y="Year")
+
+# Add fields for Annual Payroll and Quarterly Payroll in 2019 dollars
+df$PAYANN_19DOL = df$PAYANN * df$CPI_2019
+df$PAYQTR1_19DOL = df$PAYQTR1 * df$CPI_2019
+
+```
+
+
+## Average wage rates by year
+ * Average wage rate for a given industry by county
+ * Average wage rate by county, regardless of industry
+ * Average wage rate for each state, regardless of industry
+ * Average wage rate for an industry by state
+ 
+ Round these new fields to 2 decimal places
+ 
+```{r}
+
+# Average wage rate for counties, regardless of industry
+df<-df %>% group_by(STCTYNUM) %>%
+  mutate(CTYPAYRATE = round(sum(PAYANN)/sum(EMP), digits=2)) %>%  ## not adj for inflation
+  mutate(CTYPAYRATE_19DOL = round(sum(PAYANN_19DOL)/sum(EMP), digits=2)) %>% ## adjusted to 2019 dollars
+  ungroup()
+
+#Average wage rate by Year-County-Industry, add to df
+df$CTYPAYRATE_NAIC = round(df$PAYANN/df$EMP, digits=2)  ## not adj for inflation
+df$CTYPAYRATE_NAIC_19DOL = round(df$PAYANN_19DOL/df$EMP, digits=2) ## adjusted to 2019 dollars
+
+# Average wage rate for each state, regardless of industry
+df <- df %>% group_by(STATENUM) %>%
+  mutate(STATEPAYRATE = round(sum(PAYANN)/sum(EMP), digits=2))  %>%  ## not adj for inflation
+  mutate(STATEPAYRATE_19DOL = round(sum(PAYANN_19DOL)/sum(EMP), digits=2)) %>% ## adjusted to 2019 dollars
+  ungroup()
+
+# Average wage rate for an industry by state
+df<-df %>% group_by(STATENUM,NAIC) %>%
+  mutate(STATEPAYRATE_NAIC = round(sum(PAYANN)/sum(EMP), digits=2)) %>% ## not adj for inflation
+  mutate(STATEPAYRATE_NAIC_19DOL = round(sum(PAYANN_19DOL)/sum(EMP), digits=2)) %>% ## adjusted to 2019 dollars
+  ungroup()
+
+str(df)
+``` 
+##Coerce to factors
+ * NAIC
+ * STCTYNUM
+ * STATENUM
+ * COUNTYNUM
+ * COUNTY
+ * STATE
+
+```{r}
+df$NAIC <- as.factor(df$NAIC)
+df$STCTYNUM <- as.factor(df$STCTYNUM)
+df$STATENUM <- as.factor(df$STATENUM)
+df$COUNTYNUM <- as.factor(df$COUNTYNUM)
+df$COUNTY <- as.factor(df$COUNTY)
+df$STATE <- as.factor(df$STATE)
+str(df)
+
+# Check on level order
+levels(df$NAIC) #looks good
+levels(df$STCTYNUM) #looks good
+levels(df$STATENUM) #looks good
+levels(df$COUNTYNUM) #looks good
+levels(df$COUNTY) #Alphabetical, fine
+levels(df$STATE) #Alphabetical, fine
+
+# Remove fields no longer needed
+df<- df %>% select(-c("COUNTYSTATE","LFO"))
+
+str(df)
+``` 
+
+
