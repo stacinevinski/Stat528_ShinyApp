@@ -138,8 +138,8 @@ ui <- fluidPage(
   
         .my_checkBox_Arts input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: yellow;
-            background-color: yellow;
+            color: MediumVioletRed;
+            background-color: MediumVioletRed;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -165,8 +165,8 @@ ui <- fluidPage(
   
         .my_checkBox_Construction input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: brown;
-            background-color: brown;
+            color: Salmon;
+            background-color: Salmon;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -192,8 +192,8 @@ ui <- fluidPage(
   
         .my_checkBox_Educational input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: purple;
-            background-color: purple;
+            color: BlueViolet;
+            background-color: BlueViolet;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -219,8 +219,8 @@ ui <- fluidPage(
   
         .my_checkBox_Finance input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: black;
-            background-color: black;
+            color: YellowGreen;
+            background-color: YellowGreen;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -246,8 +246,8 @@ ui <- fluidPage(
   
         .my_checkBox_Health input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: green;
-            background-color: green;
+            color: SeaGreen;
+            background-color: SeaGreen;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -273,8 +273,8 @@ ui <- fluidPage(
   
         .my_checkBox_NotClassified input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: orange;
-            background-color: orange;
+            color: Tan;
+            background-color: Tan;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -354,8 +354,8 @@ ui <- fluidPage(
   
         .my_checkBox_Manufacturing input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: olivedrab;
-            background-color: olivedrab;
+            color: DarkOliveGreen;
+            background-color: DarkOliveGreen;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -435,8 +435,8 @@ ui <- fluidPage(
   
         .my_checkBox_RealEstate input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: aquamarine;
-            background-color: aquamarine;
+            color: SteelBlue;
+            background-color: SteelBlue;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -516,8 +516,8 @@ ui <- fluidPage(
   
         .my_checkBox_Utilities input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: navyblue;
-            background-color: navyblue;
+            color: DarkBlue;
+            background-color: DarkBlue;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -543,8 +543,8 @@ ui <- fluidPage(
   
         .my_checkBox_Wholesale input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: honeydew;
-            background-color: honeydew;
+            color: RosyBrown;
+            background-color: RosyBrown;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -570,8 +570,8 @@ ui <- fluidPage(
   
         .my_checkBox_Other input[type="checkbox"]:checked:after {
             border: 2px solid black;
-            color: grey;
-            background-color: grey;
+            color: orange;
+            background-color: orange;
             content: "X";
             font-size: smaller;
             vertical-align: middle;
@@ -582,6 +582,7 @@ ui <- fluidPage(
             top: 0;
             width: 15px;
         }
+
   '))
     ),
     tags$div(
@@ -728,6 +729,10 @@ ui <- fluidPage(
                 <span><span style="color: black;">Other services (except public administration)</span></span>
               </label>
             </div>
+              <label>
+                <span><span style="color: grey;">&#9646;Not Available</span></span>
+              </label>
+
           </div>'
       )
     )
@@ -857,23 +862,23 @@ server <- function(input, output) {
           scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                        "Administrative and support and waste management and remediation services"="blue",
                                                        "Agriculture, forestry, fishing and hunting"="pink",
-                                                       "Arts, entertainment, and recreation"="yellow",
-                                                       "Construction"="brown",
-                                                       "Educational services"="purple",
-                                                       "Finance and insurance"="black",
-                                                       "Health care and social assistance"="green",
-                                                       "Industries not classified"="orange",
+                                                       "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                       "Construction"="Salmon",
+                                                       "Educational services"="BlueViolet",
+                                                       "Finance and insurance"="YellowGreen",
+                                                       "Health care and social assistance"="SeaGreen",
+                                                       "Industries not classified"="Tan",
                                                        "Information"="maroon",
                                                        "Management of companies and enterprises"="limegreen",
-                                                       "Manufacturing"="olivedrab",
+                                                       "Manufacturing"="DarkOliveGreen",
                                                        "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                        "Professional, scientific, and technical services"="turquoise",
-                                                       "Real estate and rental and leasing"="aquamarine",
+                                                       "Real estate and rental and leasing"="SteelBlue",
                                                        "Retail trade"="khaki",
                                                        "Transportation and warehousing"="orchid",
-                                                       "Utilities"="navyblue",
-                                                       "Wholesale trade"="honeydew",
-                                                       "Other services (except public administration)"="grey"
+                                                       "Utilities"="DarkBlue",
+                                                       "Wholesale trade"="RosyBrown",
+                                                       "Other services (except public administration)"="orange"
           ))
         
       })
@@ -911,23 +916,23 @@ server <- function(input, output) {
           scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                        "Administrative and support and waste management and remediation services"="blue",
                                                        "Agriculture, forestry, fishing and hunting"="pink",
-                                                       "Arts, entertainment, and recreation"="yellow",
-                                                       "Construction"="brown",
-                                                       "Educational services"="purple",
-                                                       "Finance and insurance"="black",
-                                                       "Health care and social assistance"="green",
-                                                       "Industries not classified"="orange",
+                                                       "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                       "Construction"="Salmon",
+                                                       "Educational services"="BlueViolet",
+                                                       "Finance and insurance"="YellowGreen",
+                                                       "Health care and social assistance"="SeaGreen",
+                                                       "Industries not classified"="Tan",
                                                        "Information"="maroon",
                                                        "Management of companies and enterprises"="limegreen",
-                                                       "Manufacturing"="olivedrab",
+                                                       "Manufacturing"="DarkOliveGreen",
                                                        "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                        "Professional, scientific, and technical services"="turquoise",
-                                                       "Real estate and rental and leasing"="aquamarine",
+                                                       "Real estate and rental and leasing"="SteelBlue",
                                                        "Retail trade"="khaki",
                                                        "Transportation and warehousing"="orchid",
-                                                       "Utilities"="navyblue",
-                                                       "Wholesale trade"="honeydew",
-                                                       "Other services (except public administration)"="grey"
+                                                       "Utilities"="DarkBlue",
+                                                       "Wholesale trade"="RosyBrown",
+                                                       "Other services (except public administration)"="orange"
           ))
       })
     } else if (input$level == "RegionState") {
@@ -966,23 +971,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (input$regions == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
@@ -997,23 +1002,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (input$regions == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
@@ -1028,23 +1033,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
@@ -1059,23 +1064,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         }
       })
@@ -1121,23 +1126,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (region == "Northeast"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Pennsylvania","New Jersey","New York","Connecticut","Rhode Island","Massachusetts","Vermont","New Hampshire","Maine")) %>%
@@ -1152,23 +1157,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else if (region == "South"){
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Texas","Oklahoma","Arkansas","Louisiana","Mississippi","Alabama","Georgia","Florida","South Carolina","Tennessee","North Carolina","Kentucky","Virginia","West Virginia","Maryland","Delaware")) %>%
@@ -1183,23 +1188,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         } else {
           TopInds <- df %>% filter(YEAR==input$year,INDUSTRY %in% indsList, STATE %in% c("Alaska","Hawaii","Washington","Oregon","California","Montana","Idaho","Nevada","Wyoming","Utah","Colorado","Arizona","New Mexico")) %>%
@@ -1214,23 +1219,23 @@ server <- function(input, output) {
             scale_fill_manual(name="Industry",values = c("Accommodation and food services"="red",
                                                          "Administrative and support and waste management and remediation services"="blue",
                                                          "Agriculture, forestry, fishing and hunting"="pink",
-                                                         "Arts, entertainment, and recreation"="yellow",
-                                                         "Construction"="brown",
-                                                         "Educational services"="purple",
-                                                         "Finance and insurance"="black",
-                                                         "Health care and social assistance"="green",
-                                                         "Industries not classified"="orange",
+                                                         "Arts, entertainment, and recreation"="MediumVioletRed",
+                                                         "Construction"="Salmon",
+                                                         "Educational services"="BlueViolet",
+                                                         "Finance and insurance"="YellowGreen",
+                                                         "Health care and social assistance"="SeaGreen",
+                                                         "Industries not classified"="Tan",
                                                          "Information"="maroon",
                                                          "Management of companies and enterprises"="limegreen",
-                                                         "Manufacturing"="olivedrab",
+                                                         "Manufacturing"="DarkOliveGreen",
                                                          "Mining, quarrying, and oil and gas extraction"="springgreen",
                                                          "Professional, scientific, and technical services"="turquoise",
-                                                         "Real estate and rental and leasing"="aquamarine",
+                                                         "Real estate and rental and leasing"="SteelBlue",
                                                          "Retail trade"="khaki",
                                                          "Transportation and warehousing"="orchid",
-                                                         "Utilities"="navyblue",
-                                                         "Wholesale trade"="honeydew",
-                                                         "Other services (except public administration)"="grey"
+                                                         "Utilities"="DarkBlue",
+                                                         "Wholesale trade"="RosyBrown",
+                                                         "Other services (except public administration)"="orange"
             ))
         }
       })
